@@ -1,0 +1,50 @@
+# AMPL script for solving the instances of optimal switching sequence problem with Baron
+
+reset;
+
+option outdir "C:\Users\qhe\Documents\AMPL\switched_system\results\";
+
+#turn off ampl presolve
+option presolve 0;
+
+option solver Baron;
+
+option baron_options 'maxtime=600 objbound';
+
+# include the following folders in the search path
+option ampl_include ".\
+.\instances";
+
+model ss_minlp_general.mod;
+
+#set INSTANCES = {"n2_m2_K20_1","n2_m2_K20_2","n2_m2_K20_3","n2_m2_K20_4","n2_m2_K20_5","n2_m2_K20_6","n2_m2_K20_7","n2_m2_K20_8","n2_m2_K20_9","n2_m2_K20_10","n2_m2_K50_1","n2_m2_K50_2","n2_m2_K50_3","n2_m2_K50_4","n2_m2_K50_5","n2_m2_K50_6","n2_m2_K50_7","n2_m2_K50_8","n2_m2_K50_9","n2_m2_K50_10","n2_m2_K500_1","n2_m2_K500_2","n2_m2_K500_3","n2_m2_K500_4","n2_m2_K500_5","n2_m2_K500_6","n2_m2_K500_7","n2_m2_K500_8","n2_m2_K500_9","n2_m2_K500_10","n2_m5_K500_1","n2_m5_K500_2","n2_m5_K500_3","n2_m5_K500_4","n2_m5_K500_5","n2_m5_K500_6","n2_m5_K500_7","n2_m5_K500_8","n2_m5_K500_9","n2_m5_K500_10","n2_m10_K500_1","n2_m10_K500_2","n2_m10_K500_3","n2_m10_K500_4","n2_m10_K500_5","n2_m10_K500_6","n2_m10_K500_7","n2_m10_K500_8","n2_m10_K500_9","n2_m10_K500_10","n5_m2_K100_1","n5_m2_K100_2","n5_m2_K100_3","n5_m2_K100_4","n5_m2_K100_5","n5_m2_K100_6","n5_m2_K100_7","n5_m2_K100_8","n5_m2_K100_9","n5_m2_K100_10","n5_m5_K100_1","n5_m5_K100_2","n5_m5_K100_3","n5_m5_K100_4","n5_m5_K100_5","n5_m5_K100_6","n5_m5_K100_7","n5_m5_K100_8","n5_m5_K100_9","n5_m5_K100_10","n5_m10_K100_1","n5_m10_K100_2","n5_m10_K100_3","n5_m10_K100_4","n5_m10_K100_5","n5_m10_K100_6","n5_m10_K100_7","n5_m10_K100_8","n5_m10_K100_9","n5_m10_K100_10","n8_m2_K50_1","n8_m2_K50_2","n8_m2_K50_3","n8_m2_K50_4","n8_m2_K50_5","n8_m2_K50_6","n8_m2_K50_7","n8_m2_K50_8","n8_m2_K50_9","n8_m2_K50_10","n10_m2_K20_1","n10_m2_K20_2","n10_m2_K20_3","n10_m2_K20_4","n10_m2_K20_5","n10_m2_K20_6","n10_m2_K20_7","n10_m2_K20_8","n10_m2_K20_9","n10_m2_K20_10"};
+
+set INSTANCES = {"n2_m10_K500_3","n2_m10_K500_4","n2_m10_K500_5","n2_m10_K500_6","n2_m10_K500_7","n2_m10_K500_8","n2_m10_K500_9","n2_m10_K500_10","n5_m2_K100_1","n5_m2_K100_2","n5_m2_K100_3","n5_m2_K100_4","n5_m2_K100_5","n5_m2_K100_6","n5_m2_K100_7","n5_m2_K100_8","n5_m2_K100_9","n5_m2_K100_10","n5_m5_K100_1","n5_m5_K100_2","n5_m5_K100_3","n5_m5_K100_4","n5_m5_K100_5","n5_m5_K100_6","n5_m5_K100_7","n5_m5_K100_8","n5_m5_K100_9","n5_m5_K100_10","n5_m10_K100_1","n5_m10_K100_2","n5_m10_K100_3","n5_m10_K100_4","n5_m10_K100_5","n5_m10_K100_6","n5_m10_K100_7","n5_m10_K100_8","n5_m10_K100_9","n5_m10_K100_10","n8_m2_K50_1","n8_m2_K50_2","n8_m2_K50_3","n8_m2_K50_4","n8_m2_K50_5","n8_m2_K50_6","n8_m2_K50_7","n8_m2_K50_8","n8_m2_K50_9","n8_m2_K50_10","n10_m2_K20_1","n10_m2_K20_2","n10_m2_K20_3","n10_m2_K20_4","n10_m2_K20_5","n10_m2_K20_6","n10_m2_K20_7","n10_m2_K20_8","n10_m2_K20_9","n10_m2_K20_10"};
+
+for {filename in INSTANCES}{
+	reset data;
+	data (filename & ".dat");
+	solve;
+	
+	if solve_result = "infeasible" or solve_result = "failure" then {
+		display solve_result > ($outdir & filename & ".out");
+		close ($outdir & filename & ".out");
+	}
+
+	if solve_result = "limit" then {
+		display solve_result > ($outdir & filename & ".out");		
+	 	display sum{i in ROWS} x[K, i]^2 > ($outdir & filename & ".out");
+	 	display z > ($outdir & filename & ".out");
+		close ($outdir & filename & ".out");		
+	}
+	
+	if solve_result = "solved" then {
+		display solve_result > ($outdir & filename & ".out");
+		display l2norm_squared > ($outdir & filename & ".out");
+		display _solve_time > ($outdir & filename & ".out");
+		# record the best relaxation bound
+		# display l2norm_squared.obj_ub > ($outdir & filename & ".out");
+		display z > ($outdir & filename & ".out");
+		close ($outdir & filename & ".out");
+	}		
+}
