@@ -6,21 +6,16 @@ For more details, please refer to the following working paper:
 
 Wu, Zeyang, and Qie He. "Optimal switching sequence for switched linear systems." arXiv preprint arXiv:1805.04677 (2018).
 
-Overview
+## Overview
 
-This directory contains the codes necessary to run the forward dynamic programming algorithm (FDP) in the paper. The code is written in Matlab and it can generate instances of different parameters and solve it by FDP. We also provide an AMPL script to solve the instances as well. 
+This directory contains code for the forward dynamic programming algorithm (FDP) described in the paper above. The code is written in Matlab. You can use it to generate instances of specified parameters and solve them by FDP. We also provide an AMPL script to solve the instances with a global optimization solver Baron. 
 
-Requirements
+## How to run the code
 
-Recent versions of Matlab，AMPL are required. 
+The script 'gen_instance_and_solve_by_FDP.m' generates all the test instances and then solves them with FDP. The test results will be stored in the *.dat files. 
 
-
-Run the code
-
-The script 'gen_instance_and_solve_by_FDP.m' generates instances and solve it by FDP. There are two parameters can be specified in the test. You can modify it in the script directly. The test result will be recorded in the *.dat files. 
-
-1. There are 10 sets of sizes of the test instances, e.g., dimension, number of matrices. By default, the script generates 10 instances of 10 different sizes.
-2. There is a 600s time limit for FDP. This can also be modified in the file.   
+1. There are 10 combinations of parameters. For each combination, the script generates 10 random instances.
+2. There is a time limit of 600s to run FDP for each instance.
 
 
 In the Matlab command line, simply run 
